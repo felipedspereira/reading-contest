@@ -10,8 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -99,10 +97,9 @@ public class UserControllerTest {
 	
 	@Test
 	public void shouldGetAlistOfUsers() throws Exception {
-		List<User> users = new ArrayList<User>();
-		users.addAll(Arrays.asList(
+		List<User> users = List.of(
 				new User("user A", "usera.test.com", "123", false), 
-				new User("user B", "userb.test.com", "123", false)));
+				new User("user B", "userb.test.com", "123", false));
 
 		// @formatter:off
 		when(service.findAll(ArgumentMatchers.anyInt(), ArgumentMatchers.anyInt()))

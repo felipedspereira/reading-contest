@@ -1,4 +1,4 @@
-package com.readingcontest.controller;
+package com.readingcontest.service;
 
 import static org.mockito.Mockito.when;
 
@@ -35,7 +35,7 @@ public class UserServiceTest {
 			.thenReturn(Optional.of(newUser));
 		// @formatter:on
 		
-		service.saveUser(newUser);
+		service.createUser(newUser);
 	}
 	
 	@Test(expected = UserNotFoundException.class)
@@ -53,19 +53,48 @@ public class UserServiceTest {
 	
 	@Test(expected = DuplicatedUserException.class) 
 	public void shouldThrowExceptionWhenChangingUserNameToAlreadyRegisteredName() throws UserNotFoundException, DuplicatedUserException {
-		User user = new User("teste", "felipe.dspereira@gmail.com", "123", false);
+		User userBeingUpdated = new User("teste", "felipe.dspereira@gmail.com", "123", false);
+		userBeingUpdated.setId(1l);
+		
+		User differentUser = new User("db user", "db@test.com", "123", false);
+		differentUser.setId(233l); // it is a different user
 		
 		// @formatter:off
-		when(repository.findById(ArgumentMatchers.any()))
-			.thenReturn(Optional.of(user));
+		when(repository.findById(userBeingUpdated.getId()))
+			.thenReturn(Optional.of(userBeingUpdated));
 		
-		when(repository.findByName(ArgumentMatchers.anyString()))
-			.thenReturn(Optional.of(user));
+		when(repository.findByName(userBeingUpdated.getName()))
+			.thenReturn(Optional.of(differentUser));
 		// @formatter:on
 		
-		service.updateUser(user);
+		service.updateUser(userBeingUpdated);
 	}
 	
+	@Test
+	public void shouldUpdateUser() throws UserNotFoundException, DuplicatedUserException {
+		User userBeingUpdated = new User("test", "test@test.com", "123", false);
+		userBeingUpdated.setId(1l);
+		
+		when(service.getUserById(userBeingUpdated.getId()))
+			.thenReturn(Optional.of(userBeingUpdated));
+		
+		when(service.getUserByName(userBeingUpdated.getName()))
+			.thenReturn(Optional.of(userBeingUpdated));
+		
+		service.updateUser(userBeingUpdated);
+	}
 	
-
+	@Test
+	public void shouldUpdateUserWhenNameNotFoundInDatabase() throws UserNotFoundException, DuplicatedUserException {
+		User userBeingUpdated = new User("test", "test@test.com", "123", false);
+		userBeingUpdated.setId(1l);
+		
+		when(service.getUserById(userBeingUpdated.getId()))
+			.thenReturn(Optional.of(userBeingUpdated));
+		
+		when(service.getUserByName(userBeingUpdated.getName()))
+			.thenReturn(Optional.empty());
+		
+		service.updateUser(userBeingUpdated);
+	}
 }

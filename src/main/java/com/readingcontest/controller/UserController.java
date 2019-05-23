@@ -27,7 +27,7 @@ public class UserController {
 
 	@GetMapping(value = "{id}")
 	public User getById(@PathVariable("id") Long id) {
-		return service.findUserById(id).orElse(null);
+		return service.getUserById(id).orElse(null);
 	}
 
 	@GetMapping
@@ -38,12 +38,11 @@ public class UserController {
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public void create(@RequestBody User user) throws DuplicatedUserException {
-		service.saveUser(user);
+		service.createUser(user);
 	}
 
 	@PutMapping
 	public void update(@RequestBody User user) throws UserNotFoundException, DuplicatedUserException {
-		service.saveUser(user);
+		service.updateUser(user);
 	}
-
 }

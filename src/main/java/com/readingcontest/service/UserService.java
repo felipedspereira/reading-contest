@@ -1,6 +1,7 @@
 package com.readingcontest.service;
 
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,7 +19,7 @@ public class UserService {
 	@Autowired
 	private UserRepository repository;
 
-	public User saveUser(User user) throws DuplicatedUserException {
+	public User createUser(User user) throws DuplicatedUserException {
 
 		if (this.getUserByName(user.getName()).isPresent()) {
 			throw new DuplicatedUserException();
@@ -29,22 +30,28 @@ public class UserService {
 	
 	public User updateUser(User user) throws UserNotFoundException, DuplicatedUserException {
 		
-		if (repository.findById(user.getId()).isEmpty()) {
-			throw new UserNotFoundException();
-		}
+		// @formatter:off
+		this.getUserById(user.getId())
+			.orElseThrow(UserNotFoundException::new);
 		
-		if (this.getUserByName(user.getName()).isPresent()) {
-			throw new DuplicatedUserException();
-		}
-
+		this.getUserByName(user.getName())
+			.or(() -> Optional.of(user))
+			.filter(isTheSameUser(user))
+			.orElseThrow(DuplicatedUserException::new);
+		// @formatter:on
+		
 		return repository.save(user);
+	}
+
+	private Predicate<? super User> isTheSameUser(User user) {
+		return u -> u.getId().equals(user.getId());
 	}
 
 	public Optional<User> getUserByName(String name) {
 		return repository.findByName(name);
 	}
 
-	public Optional<User> findUserById(Long id) {
+	public Optional<User> getUserById(Long id) {
 		return repository.findById(id);
 	}
 

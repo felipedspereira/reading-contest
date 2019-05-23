@@ -15,7 +15,7 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column
+	@Column(unique = true)
 	private String name;
 
 	@Column(nullable = false)
@@ -26,6 +26,9 @@ public class User {
 
 	@Column
 	private boolean admin;
+	
+	@Column(nullable = false)
+	private boolean active = true;
 
 	public User(String name, String email, String password, boolean admin) {
 		this.name = name;
@@ -76,5 +79,13 @@ public class User {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+	
+	public void toggleUserActivation() {
+		this.active = !this.active;
 	}
 }

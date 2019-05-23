@@ -2,6 +2,7 @@ package com.readingcontest.controller;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -53,7 +54,7 @@ public class UserControllerTest {
 	public void shouldCreateNewUser() throws Exception {
 
 		// @formatter:off
-		when(service.saveUser(ArgumentMatchers.any(User.class)))
+		when(service.createUser(ArgumentMatchers.any(User.class)))
 			.thenReturn(user);
 
 		mockMvc.perform(
@@ -62,6 +63,8 @@ public class UserControllerTest {
 				.contentType(MediaType.APPLICATION_JSON_VALUE))
 		.andExpect(status().is(HttpStatus.CREATED.value()));
 		// @formatter:on
+		
+		verify(service).createUser(ArgumentMatchers.any());
 	}
 
 	@Test
@@ -76,6 +79,8 @@ public class UserControllerTest {
 				.contentType(MediaType.APPLICATION_JSON_VALUE))
 		.andExpect(status().is(HttpStatus.OK.value()));
 		// @formatter:on
+		
+		verify(service).updateUser(ArgumentMatchers.any());
 	}
 	
 	@Test
@@ -84,7 +89,7 @@ public class UserControllerTest {
 		dbUser.setId(1l);
 		
 		// @formatter:off
-		when(service.findUserById(ArgumentMatchers.any(Long.class)))
+		when(service.getUserById(ArgumentMatchers.any(Long.class)))
 			.thenReturn(Optional.of(dbUser));
 		
 		mockMvc.perform(
@@ -93,6 +98,8 @@ public class UserControllerTest {
 		.andExpect(status().isOk())
 		.andExpect(content().json(mapper.writeValueAsString(dbUser)));
 		// @formatter:on
+		
+		verify(service).getUserById(ArgumentMatchers.anyLong());
 	}
 	
 	@Test
@@ -114,5 +121,7 @@ public class UserControllerTest {
 		.andExpect(jsonPath("$.content", hasSize(2)))
 		.andExpect(jsonPath("$.content.[1].name", equalTo("user B")));
 		// @formatter:on
+		
+		verify(service).findAll(ArgumentMatchers.anyInt(), ArgumentMatchers.anyInt());
 	}
 }

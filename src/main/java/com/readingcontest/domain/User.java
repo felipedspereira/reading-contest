@@ -18,14 +18,18 @@ public class User {
 	@Column
 	private String name;
 
+	@Column(nullable = false)
+	private String email;
+
 	@Column
 	private String password;
 
 	@Column
 	private boolean admin;
 
-	public User(String name, String password, boolean admin) {
+	public User(String name, String email, String password, boolean admin) {
 		this.name = name;
+		this.email = email;
 		this.password = password;
 		this.admin = admin;
 	}
@@ -64,5 +68,13 @@ public class User {
 
 	public void setAdmin(boolean admin) {
 		this.admin = admin;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 }

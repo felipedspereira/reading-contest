@@ -6,4 +6,6 @@ spring:
     url: jdbc:mysql://${DB_HOST}/reading_contest
     username: ${DB_USER}
     password: ${DB_PASSWORD}
-    
+  jpa:
+    hibernate:
+      ddl-auto: none

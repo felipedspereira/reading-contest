@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Table(name = "user")
 @Entity
-public class User {
+public class UserCredentials {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,23 +18,17 @@ public class User {
 	@Column(unique = true)
 	private String name;
 
-	@Column(nullable = false)
-	private String email;
-
 	@Column
-	private boolean admin;
-	
-	@Column(nullable = false)
-	private boolean active = true;
+	private String password;
 
-	public User(String name, String email, boolean admin) {
-		this.name = name;
-		this.email = email;
-		this.admin = admin;
+	private UserCredentials() {
+		// TODO Auto-generated constructor stub
 	}
 
-	private User() {
-		// TODO Auto-generated constructor stub
+	public UserCredentials(Long id, String name, String password) {
+		this.id = id;
+		this.name = name;
+		this.password = password;
 	}
 
 	public Long getId() {
@@ -53,27 +47,12 @@ public class User {
 		this.name = name;
 	}
 
-	public boolean isAdmin() {
-		return admin;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setAdmin(boolean admin) {
-		this.admin = admin;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public boolean isActive() {
-		return active;
-	}
-	
-	public void toggleUserActivation() {
-		this.active = !this.active;
-	}
 }

@@ -46,7 +46,7 @@ public class UserControllerTest {
 	
 	@BeforeClass
 	public static void setUp() {
-		user = new User("Felipe Pereira", "felipedspereira@gmail.com", "123", true);
+		user = new User("Felipe Pereira", "felipedspereira@gmail.com", true);
 		mapper = new ObjectMapper();
 	}
 
@@ -85,7 +85,7 @@ public class UserControllerTest {
 	
 	@Test
 	public void shouldRetrieveUser() throws Exception {
-		User dbUser = new User("Felipe", "Teste@test.com", "123", true);
+		User dbUser = new User("Felipe", "Teste@test.com", true);
 		dbUser.setId(1l);
 		
 		// @formatter:off
@@ -105,8 +105,8 @@ public class UserControllerTest {
 	@Test
 	public void shouldGetAlistOfUsers() throws Exception {
 		List<User> users = List.of(
-				new User("user A", "usera.test.com", "123", false), 
-				new User("user B", "userb.test.com", "123", false));
+				new User("user A", "usera.test.com", false), 
+				new User("user B", "userb.test.com", false));
 
 		// @formatter:off
 		when(service.findAll(ArgumentMatchers.anyInt(), ArgumentMatchers.anyInt()))

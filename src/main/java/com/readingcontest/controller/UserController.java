@@ -31,13 +31,13 @@ public class UserController {
 	}
 
 	@GetMapping
-	public Page<User> getUsers(@RequestParam("page") Integer page, @RequestParam("size") Integer size) {
+	public Page<User> findUsers(@RequestParam("page") Integer page, @RequestParam("size") Integer size) {
 		return service.findAll(page, size);
 	}
 
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public void create(@RequestBody User user) throws DuplicatedUserException {
+	public void create(@RequestBody User user) throws Exception {
 		service.createUser(user);
 	}
 

@@ -43,10 +43,6 @@ public class UserService {
 		return repository.save(user);
 	}
 
-	private Predicate<? super User> isTheSameUser(User user) {
-		return u -> u.getId().equals(user.getId());
-	}
-
 	public Optional<User> getUserByName(String name) {
 		return repository.findByName(name);
 	}
@@ -57,6 +53,10 @@ public class UserService {
 
 	public Page<User> findAll(Integer page, Integer size) {
 		return repository.findAll(PageRequest.of(page, size));
+	}
+
+	private Predicate<? super User> isTheSameUser(User user) {
+		return u -> u.getId().equals(user.getId());
 	}
 
 }
